@@ -1,11 +1,21 @@
 import matplotlib.pyplot as plt
+from modelWrapper import ModelWrapper
+from modelManual import ModelManual
+from modelTransfer import ModelTransferVGG16
 from imageGenerator import get_image_dataset_generator_from_path, show_dataset_images
+
+
+# CELL 52
+model_options = {"manual": ModelManual, "transfer_learning_vgg16": ModelTransferVGG16}
+
 
 # CELL 7
 # Image data generator settings
 IMG_SIZE = (128, 128)
 BATCH_SIZE = 20  # @param {type:"slider", min:5, max:64, step:1}
 DATASET_TYPE = "compressed"  # @param ["original", "compressed"]
+EPOCHS = 30  # @param {type:"slider", min:5, max:50, step:5}
+MODEL_TYPE = "manual"  # @param ["manual", "transfer_learning_vgg16"]
 
 
 # CELL 44
@@ -35,7 +45,28 @@ train_ds, validation_ds, test_ds = get_image_dataset_generator_from_path(
 # CELL 45
 print("Train images")
 show_dataset_images(train_ds, figsize=(8, 8))
-plt.show()
+# plt.show()
 print("Validation images")
 show_dataset_images(validation_ds, figsize=(8, 8))
+# plt.show()
+
+
+# CELL 57
+cnn = ModelWrapper(
+    train_ds=train_ds,
+    validation_ds=validation_ds,
+    test_ds=test_ds,
+    model=model_options[MODEL_TYPE],
+    epochs=EPOCHS,
+)
+cnn.compile()
+cnn.train()
+
+cnn.show_metrics_per_epochs(
+    metric_title="accuracy", metrics=["accuracy", "val_accuracy"]
+)
+cnn.show_metrics_per_epochs(metric_title="loss", metrics=["loss", "val_loss"])
+
+cnn.evaluate()
+cnn.show_confusion_matrix(dataset=cnn.test_ds, figsize=(8, 6.6))
 plt.show()

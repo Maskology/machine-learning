@@ -160,7 +160,7 @@ class ModelWrapper:
         ]
 
     def get_input_shape_from_dataset(self):
-        first_batch = train_ds.next()[0]
+        first_batch = self.train_ds.next()[0]
         first_img = first_batch[0]
         return tuple(tf.shape(first_img).numpy())
 
