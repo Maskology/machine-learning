@@ -1,7 +1,7 @@
 import tensorflow as tf
 from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras.models import Sequential, Model
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Flatten, Dense
 from tensorflow.keras.applications.vgg16 import VGG16
 from modelInterface import ModelInterface
 
