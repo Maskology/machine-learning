@@ -1,4 +1,3 @@
-# CELL 49
 class ModelInterface:
     def __init__(self, input_shape, output_units):
         self.input_shape = input_shape

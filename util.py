@@ -2,6 +2,9 @@ import os
 import humanize
 import shutil
 import re
+import tensorflow as tf
+from tensorflow import keras
+from keras.layers import Conv2D
 
 
 def remove_existing_dir(dir):
@@ -35,3 +38,28 @@ def copy(src, dst):
         shutil.copy(src, dst)
     else:
         print(f"{src} is neither directory nor file")
+
+
+def get_nested_file_path(dir):
+    paths = []
+    for root, dirs, files in os.walk(dir):
+        for file in files:
+            path = os.path.join(root, file)
+            paths.append(path)
+    return paths
+
+
+def get_img_array(img_path, size):
+    img = keras.preprocessing.image.load_img(path=img_path, target_size=size)
+    array = keras.preprocessing.image.img_to_array(img)
+    return array
+
+
+def get_cnn_last_conv_layer_name(model: tf.keras.models.Model):
+    conv_layers = get_cnn_conv_layers(model)
+    assert len(conv_layers) > 0, "model doesn't have conv2d layer"
+    return conv_layers[-1].name
+
+
+def get_cnn_conv_layers(model: tf.keras.models.Model):
+    return list(filter(lambda x: isinstance(x, Conv2D), model.layers))

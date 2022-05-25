@@ -1,5 +1,10 @@
 __pycache__
 .idea
-balinese mask
+balinese_mask
+balinese mask exam
 compressed_dataset
+structured_dataset
 structured_compressed_dataset
+saved_model
+tfjs-model
+balinese_mask.zip

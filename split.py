@@ -13,6 +13,7 @@ class DatasetDirectoryLabelSplit:
         train_split=0.8,
         validation_split=None,
         shuffle=True,
+        overwrite_exists=False,
     ):
         self.src_dir = src_dir
         self.dst_dir = dst_dir
@@ -28,11 +29,16 @@ class DatasetDirectoryLabelSplit:
         self.label_distribution = []
         self.set_label_distribution()
 
+        self.overwrite_exists = overwrite_exists
+
         self.distribution_path = {}
         self.copy_paths = []
         self.set_copy_paths()
 
     def create(self):
+        if os.path.exists(self.dst_dir) and not self.overwrite_exists:
+            print("Split folder already exists!")
+            return
         remove_existing_dir(self.dst_dir)
         self.create_concurrency()
 
